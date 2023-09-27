@@ -47,14 +47,16 @@ for (var index = 0; index < POSTS.length; index++) {
     var post = POSTS[index];
     if (isAdmin(post.author)) {
         if (!(post.id in postLog)) {
-            postLog[post.id] = {};
-            postLog[post.id].oldPost = post;
-            postLog[post.id].edittedBy = admin;
-            postLog[post.id].edittedAt = Date.now();
             var copyPost = JSON.parse(JSON.stringify(post));
             copyPost.title = '¿Es realmente TypeScript útil?';
             copyPost.author = admin;
-            postLog[post.id].newPost = copyPost;
+            var editedPost = {
+                oldPost: post,
+                edittedBy: admin,
+                edittedAt: Date.now(),
+                newPost: copyPost
+            };
+            postLog[post.id] = editedPost;
         }
     }
     else {

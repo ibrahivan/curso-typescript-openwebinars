@@ -50,7 +50,13 @@ const POSTS : blogPost[] = [
   },
 ];
 
-const postLog = {};
+type EditedPost ={
+  oldPost: blogPost;
+  edittedBy: Persona;
+  edittedAt: number;
+  newPost: blogPost;
+}
+const postLog : Record<number,EditedPost> = {};
 
 function isAdmin(person : Persona) {
 
@@ -68,14 +74,17 @@ for (let index = 0; index < POSTS.length; index++) {
   const post = POSTS[index];
   if (isAdmin(post.author)) {
     if (!(post.id in postLog)) {
-      postLog[post.id] = {};
-      postLog[post.id].oldPost = post;
-      postLog[post.id].edittedBy = admin;
-      postLog[post.id].edittedAt = Date.now();
       const copyPost = JSON.parse(JSON.stringify(post));
       copyPost.title = '¿Es realmente TypeScript útil?';
       copyPost.author = admin;
-      postLog[post.id].newPost = copyPost;
+
+      const editedPost : EditedPost = {
+        oldPost : post,
+        edittedBy : admin,
+        edittedAt : Date.now(),
+        newPost : copyPost
+      };
+      postLog[post.id]= editedPost;
     }
   } else {
     notHasPermissionLog(post.author, post);
